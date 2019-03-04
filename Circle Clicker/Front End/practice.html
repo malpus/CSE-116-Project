@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Circle Clicker</title>
+    <link href="styling.css" rel="stylesheet" type="text/css" >
+    <style>
+        canvas{
+            border: 1px solid #d3d3d3;
+            background-color:#f1f1f1;
+        }
+    </style>
+</head>
+
+<body onload="startGame()">  <!-- write javascript for loadScoreboard(); onload = "loadScoreboard();" -->
+    <div id="place"></div>
+<script>
+    function startGame() {
+        myGameArea.start();
+        displayTimer()
+    }
+
+    function startTimer(duration, display) {
+        var timer = duration, seconds;
+        setInterval(function () {
+            seconds = parseInt(timer % 11, 10);
+            display.textContent = seconds + " seconds";
+            if (--timer < 0) {
+                timer = duration;
+            }
+        }, 1100);
+    }
+    function displayTimer() {
+        var tenSeconds = 11,
+            display = document.getElementById("countdown");
+        startTimer(tenSeconds, display);
+    }
+
+    var myGameArea = {
+        canvas: document.createElement("canvas"),
+        start: function () {
+            this.canvas.width = 1000;
+            this.canvas.height = 400;
+            this.context = this.canvas.getContext("2d");
+            document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        }
+    }
+</script>
+
+<p id="Elimination">Next Elimination in:</p>
+<p id="countdown"></p>
+
+<script>
+
+</script>
+
+
+
+
+
+
+<span class="dot"></span>
+
+<h1>Circle Clicker</h1>
+<h2> Click on others to make them grow!</h2>
+<h3> Dont get too big or its GAME OVER.</h3>
+
+<form>
+    <div id="name"></div><br/>
+    <input type="text" id="name"; ><br/>        <!-- fix this so theres an input -->
+    <button onClick="sendName();" id = "send">Send</button><!--write javascript for sendName(); -->
+</form>
+
+<div id="Name">Name:</div>
+
+<table>
+    <tr>
+        <th colspan = "2">SCOREBOARD</th>
+    </tr>
+    <tr>
+        <th>1</th>
+            <td>Evan</td>
+    </tr>
+    <tr>
+        <th>2</th>
+            <td>Max</td>
+    </tr>
+
+    <tr>
+        <th>3</th>
+            <td>Tyler</td>
+    </tr>
+
+    <tr>
+        <th>4</th>
+            <td>Sam</td>
+    </tr>
+    <tr>
+         <th>5</th>
+            <td>Niko</td>
+    </tr>
+</table>
+
+
+</body>
+</html>
