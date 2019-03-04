@@ -22,7 +22,7 @@ class Game (val ID: Int){
     val y: Double = Math.pow(mouseY, 2)
     for ((name,data) <- playerList){
       if (Math.sqrt(Math.abs(x-Math.pow(data.posX,2)) + Math.abs(y-Math.pow(data.posY,2))) <= data.radius) {
-        playerList(attacker).score += 1
+        playerList(attacker).addScore()
         playerList(name).radius += main.sizeChange
       }
     }
