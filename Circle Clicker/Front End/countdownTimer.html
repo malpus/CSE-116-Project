@@ -1,0 +1,30 @@
+</head>
+<body>
+
+<p>Elimination in:</p>
+
+<p id="countdown"></p>
+
+<script>
+    function startTimer(duration, display) {
+        var timer = duration, seconds;
+        setInterval(function () {
+            seconds = parseInt(timer % 11, 10);
+
+            display.textContent = seconds + " seconds";
+
+            if (--timer < 0) {
+                timer = duration;
+            }
+        }, 1100);
+    }
+
+    window.onload = function () {
+        var tenSeconds = 11,
+            display = document.getElementById("countdown");
+        startTimer(tenSeconds, display);
+    };
+</script>
+
+</body>
+</html>
