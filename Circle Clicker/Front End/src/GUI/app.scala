@@ -20,8 +20,10 @@ object app extends JFXApp {
 
   val playerSpeed: Double = game.playerSpeed
   var circle: Circle = game.player1.circle
+  var circle2: Circle = game.player2.circle
 
   sceneGraphics.children.add(game.player1.circle)
+  sceneGraphics.children.add(game.player2.circle)
 
   def keyPressed(keyCode: KeyCode): Unit = {
     keyCode.getName match {
@@ -60,7 +62,6 @@ object app extends JFXApp {
   }
 
   var lastUpdateTime: Long = System.nanoTime()
-
 
   val update: Long => Unit = (time: Long) => {
     val dt: Double = (time - lastUpdateTime) / 1000000000.0
