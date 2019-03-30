@@ -10,25 +10,26 @@ class Game {
   val playerSpeed: Double = 10
   var radius1: Double =10
 
-  var circle: Circle = new Circle {
-    centerX = 20.0
-    centerY = 50.0
-    radius = radius1
-    fill = Color.Green
-  }
+  var player1: player = new player
 
   val windowWidth: Double = 800
   val windowHeight: Double = 600
 
   //def updateBoundariesGame(width: Double, height: Double): Unit = {}
 
-  def updatePoints(): Unit = {
+  def updatePoints(): Double = {
+    player1.points
+  }
+
+  def updateScoreBoard(): Unit = {
 
   }
 
   def update(deltaTime: Double): Unit = {
 
-    updateBoundariesGame(circle)
+    updatePoints()
+
+    //updateBoundariesGame(circle)
 
     // update location circle
     // update positions?
