@@ -7,6 +7,7 @@ import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.paint.Color
 import scalafx.scene.shape.Circle
+import scalafx.scene.transform.Scale
 import scalafx.scene.{Group, Scene}
 
 object app extends JFXApp {
@@ -18,9 +19,9 @@ object app extends JFXApp {
   var sceneGraphics: Group = new Group {}
 
   val playerSpeed: Double = game.playerSpeed
-  var circle: Circle = game.circle
+  var circle: Circle = game.player1.circle
 
-  sceneGraphics.children.add(game.circle)
+  sceneGraphics.children.add(game.player1.circle)
 
   def keyPressed(keyCode: KeyCode): Unit = {
     keyCode.getName match {
@@ -43,7 +44,8 @@ object app extends JFXApp {
 
   def dialate_circle(centerX: Double, centerY: Double): Unit = {
     if (equals_CenterHit(centerX, circle.centerX()) && equals_CenterHit(centerY, circle.centerY())) {
-      circle.radius.value += game.radius1
+      circle.radius.value += 5
+      game.player1.points += 1
     }
   }
 
