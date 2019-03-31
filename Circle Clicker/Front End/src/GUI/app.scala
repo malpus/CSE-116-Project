@@ -25,6 +25,8 @@ object app extends JFXApp {
   sceneGraphics.children.add(game.player1.circle)
   sceneGraphics.children.add(game.player2.circle)
 
+  val deltaRadius: Double = 10
+
   def keyPressed(keyCode: KeyCode): Unit = {
     keyCode.getName match {
       case "Up" => circle.translateY.value -= playerSpeed
@@ -44,10 +46,13 @@ object app extends JFXApp {
     (d1 - d2).abs < EPSILON
   }
 
-  def dialate_circle(centerX: Double, centerY: Double): Unit = {
-    if (equals_CenterHit(centerX, circle.centerX()) && equals_CenterHit(centerY, circle.centerY())) {
-      circle.radius.value += 5
+  def dilate_circle(mouseX: Double, mouseY: Double): Unit = {
+    val x: Double = circle.centerX.value
+    val y: Double = circle.centerY.value
+    val radius: Double = circle.radius.value
+    if (Math.sqrt(Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2)) <= radius){
       game.player1.points += 1
+      circle.radius.value += deltaRadius
     }
   }
 
@@ -57,7 +62,7 @@ object app extends JFXApp {
       content = List(sceneGraphics)
       // add an EventHandler[KeyEvent] to control player movement
       addEventHandler(KeyEvent.KEY_PRESSED, (event: KeyEvent) => keyPressed(event.getCode))
-      addEventHandler(MouseEvent.MOUSE_CLICKED, (event: MouseEvent) => dialate_circle(event.getX, event.getY))
+      addEventHandler(MouseEvent.MOUSE_CLICKED, (event: MouseEvent) => dilate_circle(event.getX, event.getY))
     }
   }
 
