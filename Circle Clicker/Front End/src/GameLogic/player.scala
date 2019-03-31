@@ -8,10 +8,11 @@ class player {
   var radius1: Double = 10
 
   var circle: Circle = new Circle {
-    centerX = 20.0
-    centerY = 50.0
+    val r = new scala.util.Random
+    centerX = 5 + r.nextInt((795-5) + 1)
+    centerY = 5 + r.nextInt((595-5) + 1)
     radius = radius1
-    fill = Color.Green
+    fill = Color.Purple
   }
 
   var points: Int = 0
