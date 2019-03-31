@@ -11,17 +11,17 @@ class Game (val ID: Int){
     player.posX = randomX
     player.posY = randomY
     player.radius = main.defaultRadius
-    playerList + (name -> player)
+    playerList += (name -> player)
   }
 
-  def updateData(): Unit = {} /** Will run at either 60hz or 30hz, sending a JSON udpate
-  to each player in list, dead or alive */
+  def updateData(): Unit = {} /** Will run at either 60hz or 30hz, using the socket that Jesse the plague has
+  yet to teach us about, yet expected us to have a working API and server */
 
-  def verifyClick(mouseX: Double, mouseY: Double, attacker:String): Unit = {
+  def verifyClick(mouseX: Double, mouseY: Double, attacker: String): Unit = {
     val x: Double = Math.pow(mouseX, 2)
     val y: Double = Math.pow(mouseY, 2)
-    for ((name,data) <- playerList){
-      if (Math.sqrt(Math.abs(x-Math.pow(data.posX,2)) + Math.abs(y-Math.pow(data.posY,2))) <= data.radius) {
+    for ((name,playerData) <- playerList){
+      if (Math.sqrt(Math.abs(x-Math.pow(playerData.posX,2)) + Math.abs(y-Math.pow(playerData.posY,2))) <= playerData.radius) {
         playerList(attacker).addPoint()
         playerList(name).radius += main.sizeChange
       }
