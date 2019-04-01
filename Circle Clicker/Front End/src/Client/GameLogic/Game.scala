@@ -36,6 +36,18 @@ class Game {
     playerContainer = playerContainer - name
   } /** Eliminates the highest radius player. Does not eliminate multiple players with matching radii */
 
+  def eliminateUser(): Unit = {
+    var highestRadius: Double = 0
+    var name: String = ""
+    for ((i, j) <- playerContainer){
+      if (j.circle.radius.value > highestRadius){
+        highestRadius = j.circle.radius.value
+        name = i
+      }
+    }
+    playerContainer = playerContainer - name
+  }
+
   def update(deltaTime: Double): Unit = {
 
     ElapsedTime += deltaTime
