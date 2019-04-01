@@ -1,25 +1,24 @@
 package Client.GameLogic
 
 import Client.client._
-
 import scalafx.scene.paint.Color
 import scalafx.scene.shape.Circle
 
 class Game {
 
-  var playerContainer: Map[String, Player] = Map()
+  var playerContainer: Map[String, Player] = Map() //Local Client-Side Container for All Players
 
   val playerSpeed: Double = 10
-  var radius1: Double = 10
+  val radiusStart: Double = 10
+  val deltaRadius: Double = 10
 
-  val windowWidth: Double = 800
-  val windowHeight: Double = 600
+  var ElapsedTime: Double = 0
+  val ElimTime: Double = 10 /** Time until the next player is eliminated */
 
-  //def updateBoundariesGame(width: Double, height: Double): Unit = {}
 
   def createPlayer(name: String): Unit = {
     playerContainer += (name -> new Player())
-  }
+  } /** Creates player with given name and optional given color */
 
   def updateScoreBoard(): Unit = {
   }
@@ -34,19 +33,17 @@ class Game {
       }
     }
     sceneGraphics.children.remove(game.playerContainer(name).circle)
-  }
-
-  var TotalTime: Double = 0
-  val ElimTime: Double = 40
+    playerContainer = playerContainer - name
+  } /** Eliminates the highest radius player. Does not eliminate multiple players with matching radii */
 
   def update(deltaTime: Double): Unit = {
 
-    TotalTime += deltaTime
-    println(TotalTime)
+    ElapsedTime += deltaTime
+    println(ElapsedTime)
 
-    if (Math.abs(TotalTime -ElimTime) <.01) {
+    if (Math.abs(ElapsedTime -ElimTime) <.01) {
       EliminateUser()
-      TotalTime = 0
+      ElapsedTime = 0
     }
 
     updateScoreBoard()
@@ -55,6 +52,8 @@ class Game {
 
     // update location circle
     // update positions?
-  //update click totals (total points)
-  }
+    //update click totals (total points)
+  }/** Currently just runs EliminateUser after ElimTime:40, and regularly runs updateScoreBoard */
+
+  //def updateBoundariesGame(width: Double, height: Double): Unit = {}
 }

@@ -10,49 +10,60 @@ import scalafx.scene.{Group, Scene}
 
 object client extends JFXApp {
   val game = new Game()
+  val selfHarm: Boolean = true
 
   game.createPlayer("Player 1")
   game.createPlayer("Player 2")
+  game.createPlayer("Player 3")
+  game.createPlayer("Player 4")
 
-  val windowWidth: Double = game.windowWidth
-  val windowHeight: Double = game.windowHeight
+  val clientPlayerCircle: Circle = game.playerContainer("Player 1").circle
 
   var sceneGraphics: Group = new Group {}
+  val windowWidth: Double = 800
+  val windowHeight: Double = 600
 
-  val playerSpeed: Double = game.playerSpeed
-  var circle: Circle = game.playerContainer("Player 1").circle
-  var circle2: Circle = game.playerContainer("Player 2").circle
+  var lastUpdateTime: Long = System.nanoTime()
 
   sceneGraphics.children.add(game.playerContainer("Player 1").circle)
   sceneGraphics.children.add(game.playerContainer("Player 2").circle)
+  sceneGraphics.children.add(game.playerContainer("Player 3").circle)
+  sceneGraphics.children.add(game.playerContainer("Player 4").circle)
 
-  val deltaRadius: Double = 10
+  def instantiatePlayers(): Unit = {
+    for ((_, i) <- game.playerContainer){
+      sceneGraphics.children.add(i.circle)
+    }
+  } //Goes through playerContainer in game:10 and places the players on the board -- NOT YET IMPLEMENTED
 
   def keyPressed(keyCode: KeyCode): Unit = {
     keyCode.getName match {
-      case "Up" => circle.translateY.value -= playerSpeed
-        circle.centerY.value -= circle.radius.value
-      case "Left" => circle.translateX.value -= playerSpeed
-        circle.centerX.value -= circle.radius.value
-      case "Down" => circle.translateY.value += playerSpeed
-        circle.centerY.value += circle.radius.value
-      case "Right" => circle.translateX.value += playerSpeed
-        circle.centerX.value += circle.radius.value
-      case _ => println(keyCode.getName + " pressed with no action")
+      case "Up" => clientPlayerCircle.translateY.value -= game.playerSpeed
+        clientPlayerCircle.centerY.value -= clientPlayerCircle.radius.value
+      case "Left" => clientPlayerCircle.translateX.value -= game.playerSpeed
+        clientPlayerCircle.centerX.value -= clientPlayerCircle.radius.value
+      case "Down" => clientPlayerCircle.translateY.value += game.playerSpeed
+        clientPlayerCircle.centerY.value += clientPlayerCircle.radius.value
+      case "Right" => clientPlayerCircle.translateX.value += game.playerSpeed
+        clientPlayerCircle.centerX.value += clientPlayerCircle.radius.value
     }
-  }
+  } /**Processes key presses from the client*/
 
   def dilate_circle(mouseX: Double, mouseY: Double): Unit = {
     for ((i, j) <- game.playerContainer) {
       val x: Double = j.circle.centerX.value
       val y: Double = j.circle.centerY.value
       val radius: Double = j.circle.radius.value
-      if (Math.sqrt(Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2)) <= radius) {
+      val clickDistance: Double = Math.sqrt(Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2))
+      if (clickDistance <= radius && j.circle != clientPlayerCircle && !selfHarm) {
         game.playerContainer(i).points += 1
-        game.playerContainer(i).circle.radius_=(deltaRadius + radius)
+        game.playerContainer(i).circle.radius_=(game.deltaRadius + radius)
+      } else if (clickDistance <= radius && selfHarm){
+        game.playerContainer(i).points += 1
+        game.playerContainer(i).circle.radius_=(game.deltaRadius + radius)
       }
     }
-  }
+  } /**Interprets client mouse clicks into attacks on other players*/
 
   this.stage = new PrimaryStage{
     this.title = "pong"
@@ -63,8 +74,6 @@ object client extends JFXApp {
       addEventHandler(MouseEvent.MOUSE_CLICKED, (event: MouseEvent) => dilate_circle(event.getX, event.getY))
     }
   }
-
-  var lastUpdateTime: Long = System.nanoTime()
 
   val update: Long => Unit = (time: Long) => {
     val dt: Double = (time - lastUpdateTime) / 1000000000.0
