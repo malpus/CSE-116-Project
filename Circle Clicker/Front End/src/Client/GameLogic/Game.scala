@@ -1,39 +1,50 @@
-package GameLogic
+package Client.GameLogic
 
-import GUI.app._
+import Client.client._
 
 import scalafx.scene.paint.Color
 import scalafx.scene.shape.Circle
 
 class Game {
 
-  val playerSpeed: Double = 10
-  var radius1: Double =10
+  var playerContainer: Map[String, Player] = Map()
 
-  var player1: player = new player
-  var player2: player = new player
+  val playerSpeed: Double = 10
+  var radius1: Double = 10
 
   val windowWidth: Double = 800
   val windowHeight: Double = 600
 
   //def updateBoundariesGame(width: Double, height: Double): Unit = {}
 
+  def createPlayer(name: String): Unit = {
+    playerContainer += (name -> new Player())
+  }
+
   def updateScoreBoard(): Unit = {
   }
 
   def EliminateUser(): Unit = {
-    if (player1.points > player2.points) {
-      sceneGraphics.children.remove(game.player1.circle)
+    var highestRadius: Double = 0
+    var name: String = ""
+    for ((i, j) <- playerContainer){
+      if (j.circle.radius.value > highestRadius){
+        highestRadius = j.circle.radius.value
+        name = i
+      }
     }
+    sceneGraphics.children.remove(game.playerContainer(name).circle)
   }
 
   var TotalTime: Double = 0
+  val ElimTime: Double = 40
+
   def update(deltaTime: Double): Unit = {
 
     TotalTime += deltaTime
     println(TotalTime)
 
-    if (Math.abs(TotalTime -30) <.01) {
+    if (Math.abs(TotalTime -ElimTime) <.01) {
       EliminateUser()
       TotalTime = 0
     }
