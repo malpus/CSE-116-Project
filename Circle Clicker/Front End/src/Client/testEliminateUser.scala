@@ -1,5 +1,3 @@
-package tests
-
 import Client.GameLogic.{Game, Player}
 import Client.client._
 import org.scalatest._
@@ -9,7 +7,7 @@ class testEliminateUser extends FunSuite {
   var playerContainer: Map[String, Player] = Map()
 
   def createPlayer(name: String): Unit = {
-    playerContainer += (name -> new Player())
+    playerContainer += (name -> new Player(name))
   }
 
 
@@ -28,7 +26,7 @@ class testEliminateUser extends FunSuite {
 
 
   test("CreatePlayer") {
-    val game = new Game()
+    val game = new Game(new Player("self"))
 
 
     game.createPlayer("Evan")
@@ -39,7 +37,7 @@ class testEliminateUser extends FunSuite {
   }
 
   test("test EliminatePlayer") {
-  val game = new Game()
+  val game = new Game(new Player("self"))
 
   game.createPlayer("Evan")
   game.createPlayer("Tyler")

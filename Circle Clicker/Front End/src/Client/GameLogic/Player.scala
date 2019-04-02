@@ -3,7 +3,7 @@ package Client.GameLogic
 import scalafx.scene.paint.Color
 import scalafx.scene.shape.Circle
 
-class Player {
+class Player(val name: String) {
 
   var radiusStart: Double = 10
 
