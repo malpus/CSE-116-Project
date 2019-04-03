@@ -1,7 +1,6 @@
 package Client
 
 import Client.GameLogic.{Game, Player}
-import Client.GameLogic.gameStates._
 import javafx.scene.input.{KeyCode, KeyEvent, MouseEvent}
 import scalafx.animation.AnimationTimer
 import scalafx.application.JFXApp
@@ -12,11 +11,6 @@ import scalafx.scene.{Group, Scene}
 object client extends JFXApp {
 
   val game = new Game(new Player("Player 1"))
-  val selfHarm: Boolean = true
-
-  game.createPlayer("Player 2")
-  game.createPlayer("Player 3")
-  game.createPlayer("Player 4")
 
   val clientPlayerCircle: Circle = game.client.circle
 
@@ -26,45 +20,18 @@ object client extends JFXApp {
 
   var lastUpdateTime: Long = System.nanoTime()
 
-  sceneGraphics.children.add(game.client.circle)
-  sceneGraphics.children.add(game.playerContainer("Player 2").circle)
-  sceneGraphics.children.add(game.playerContainer("Player 3").circle)
-  sceneGraphics.children.add(game.playerContainer("Player 4").circle)
-
-  def instantiatePlayers(): Unit = {
-    for ((_, i) <- game.playerContainer){
-      sceneGraphics.children.add(i.circle)
-    }
-  } //Goes through playerContainer in game:10 and places the players on the board -- NOT YET IMPLEMENTED
+  sceneGraphics.children.add(game.client.circle) /**Placeholder, should be handled by gamePre (but it's being a bitch)*/
 
   def keyPressed(keyCode: KeyCode): Unit = {
     game.gameState.keyInput(keyCode)
   } /**Passes key presses to the gameState in game*/
 
   def dilate_circle(mouseX: Double, mouseY: Double): Unit = {
-    for ((i, j) <- game.playerContainer) {
-      val x: Double = j.circle.centerX.value
-      val y: Double = j.circle.centerY.value
-      val radius: Double = j.circle.radius.value
-      val clickDistance: Double = Math.sqrt(Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2))
-      if (clickDistance <= radius) {
-        game.playerContainer(i).points += 1
-        game.playerContainer(i).circle.radius_=(game.deltaRadius + radius)
-      }
-    }
-    if (selfHarm){
-      val x: Double = game.client.circle.centerX.value
-      val y: Double = game.client.circle.centerY.value
-      val radius: Double = game.client.circle.radius.value
-      val clickDistance: Double = Math.sqrt(Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2))
-      if (clickDistance <= radius) {
-        game.client.circle.radius_=(game.deltaRadius + game.client.circle.radius.value)
-      }
-    }
-  } /**Interprets client mouse clicks into attacks on other players*/
+    game.gameState.mouseInput(mouseX, mouseY)
+  } /**Passes click to gameState in game*/
 
   this.stage = new PrimaryStage{
-    this.title = "pong"
+    this.title = "CSE-116-Project"
     scene = new Scene(windowWidth, windowHeight){
       content = List(sceneGraphics)
       // add an EventHandler[KeyEvent] to control player movement
@@ -76,11 +43,7 @@ object client extends JFXApp {
   val update: Long => Unit = (time: Long) => {
     val dt: Double = (time - lastUpdateTime) / 1000000000.0
     lastUpdateTime = time
-    game.update(dt)
-
-    //player1Sprite.translateX.value = convertX(game.player1.location.x, playerSpriteSize)
+    game.gameState.update(dt)
   }
   AnimationTimer(update).start()
-
-  def dummyMethod(): Unit = {}
 }

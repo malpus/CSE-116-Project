@@ -1,3 +1,5 @@
+package Client.tests
+
 import Client.GameLogic.{Game, Player}
 import org.scalatest.FunSuite
 
@@ -27,7 +29,7 @@ class tests extends FunSuite {
     game.createPlayer("Player three")
     assert(game.playerContainer.size == 2, "wrong")
     game.playerContainer("Player three").circle.radius = 20
-    game.EliminateUser(true)
+    game.gameState.EliminatePlayer(true)
     assert(game.playerContainer.size == 1, "wrong")
     assert(game.playerContainer("Player two").circle.radius.value == 10, "wrong")
   }

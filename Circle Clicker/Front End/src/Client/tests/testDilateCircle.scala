@@ -1,4 +1,6 @@
-import Client.GameLogic.{Game, Player}
+package Client.tests
+
+import Client.GameLogic.{Config, Game, Player}
 import Client.client._
 import org.scalatest._
 
@@ -30,12 +32,12 @@ class testDilateCircle extends FunSuite {
       val y: Double = j.circle.centerY.value
       val radius: Double = j.circle.radius.value
       val clickDistance: Double = Math.sqrt(Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2))
-      if (clickDistance <= radius && j.circle != clientPlayerCircle && !selfHarm) {
+      if (clickDistance <= radius && j.circle != clientPlayerCircle && !Config.selfHarm) {
         game.playerContainer(i).points += 1
-        game.playerContainer(i).circle.radius_=(game.deltaRadius + radius)
-      } else if (clickDistance <= radius && selfHarm) {
+        game.playerContainer(i).circle.radius_=(Config.deltaRadius + radius)
+      } else if (clickDistance <= radius && Config.selfHarm) {
         game.playerContainer(i).points += 1
-        game.playerContainer(i).circle.radius_=(game.deltaRadius + radius)
+        game.playerContainer(i).circle.radius_=(Config.deltaRadius + radius)
       }
     }
   }

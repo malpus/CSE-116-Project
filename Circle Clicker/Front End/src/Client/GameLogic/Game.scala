@@ -1,62 +1,31 @@
 package Client.GameLogic
 
 import Client.GameLogic.gameStates._
-import Client.client._
+import scalafx.scene.paint.Color
+import Client.client.sceneGraphics
 
 class Game(var client: Player) {
-  var gameState: gameState = new gamePlay(this)
-
-  var playerContainer: Map[String, Player] = Map() //Local Client-Side Container for All Players
-
-  val playerSpeed: Double = 20
-  val radiusStart: Double = 10
-  val deltaRadius: Double = 10
-
+  var gameState: gameState = new gamePre(this) /**Where the game state is held, will change depending on the phase of the game*/
+  var playerContainer: Map[String, Player] = Map() /**Local Client-Side Container for Enemy Players*/
   var ElapsedTime: Double = 0
-  val ElimTime: Double = 10 /** Time until the next player is eliminated *//**WILL SOON BE DEPRECATED*/
-
 
   def createPlayer(name: String): Unit = {
     playerContainer += (name -> new Player(name))
-  } /** Creates player with given name*/
+    playerContainer(name).circle.fill = Color.Red
+  } /** Creates player with given name, default creates red players*/
 
-  def updateScoreBoard(): Unit = {
+  def instantiatePlayers(): Unit = {
+    for ((_, i) <- playerContainer){
+      sceneGraphics.children.add(i.circle)
+    }
   }
 
-  def EliminateUser(debug: Boolean = false): Unit = {
-    var highestRadius: Double = 0
-    var name: String = ""
-    for ((i, j) <- playerContainer){
-      if (j.circle.radius.value > highestRadius){
-        highestRadius = j.circle.radius.value
-        name = i
-      }
-    }
-    sceneGraphics.children.remove(game.playerContainer(name).circle)
-    if (!debug) {
-      playerContainer = playerContainer - name
-    }
-    Client.client.dummyMethod()
-  } /** Eliminates the highest radius player*//**WILL SOON BE DEPRECATED*/
+  def updateScoreBoard(): Unit = {}
 
-  def update(deltaTime: Double): Unit = {
-
-    ElapsedTime += deltaTime
-    println(ElapsedTime)
-
-    if (Math.abs(ElapsedTime -ElimTime) <.01) {
-      EliminateUser()
-      ElapsedTime = 0
-    }
-
-    updateScoreBoard()
-
-    //updateBoundariesGame(circle)
-
-    // update location circle
-    // update positions?
-    //update click totals (total points)
-  }/** Currently just runs EliminateUser after ElimTime:40, and regularly runs updateScoreBoard */
+  createPlayer("Player 2")
+  createPlayer("Player 3")
+  createPlayer("Player 4")
+  gameState.main()
 
   //def updateBoundariesGame(width: Double, height: Double): Unit = {}
 }
