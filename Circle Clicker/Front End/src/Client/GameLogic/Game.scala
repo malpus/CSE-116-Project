@@ -22,10 +22,13 @@ class Game(var client: Player) {
 
   def updateScoreBoard(): Unit = {}
 
-  createPlayer("Player 2")
+  /*createPlayer("Player 2")
   createPlayer("Player 3")
-  createPlayer("Player 4")
-  gameState.main()
+  createPlayer("Player 4")*/
+
+  def start(): Unit = {
+    gameState.main()
+  }
 
   //def updateBoundariesGame(width: Double, height: Double): Unit = {}
 }
