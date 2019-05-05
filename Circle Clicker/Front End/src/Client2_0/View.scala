@@ -5,6 +5,7 @@ import io.socket.emitter.Emitter
 import javafx.application.Platform
 import javafx.scene.input.{KeyEvent, MouseEvent}
 import play.api.libs.json.Json
+import scalafx.animation.AnimationTimer
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.{Group, Scene}
@@ -15,29 +16,24 @@ class HandleMessagesFromPython() extends Emitter.Listener {
   override def call(objects: Object*): Unit = {
     Platform.runLater(() => {
       val gameStateList: List[String] = Json.parse(objects.apply(0).toString).as[List[String]]
-      println(gameStateList)
-      val circleList: Group = new Group {}
+      var circleList: Map[String, Map[String, String]] = Map()
       for (i <- gameStateList){
         val player: Map[String, String] = Json.parse(i).as[Map[String, String]]
-        println(player)
-        val circle: Circle = new Circle {
-          centerX_=(player("posx").toDouble)
-          centerY_=(player("posy").toDouble)
-          radius_=(10+ 5*player("score").toDouble)
-          fill = Color.Red
-        }
-        println(DesktopGUI.clientID == player("pid"))
+        var circle: Map[String, String] = Map(
+          "x" -> player("posx"),
+          "y" -> player("posy"),
+          "score" -> player("score"),
+          "color" -> "Red"
+        )
         if (DesktopGUI.clientID == player("pid")){
-          circle.fill = Color.Green
+          circle = circle + ("color" -> "Green")
         }
-        DesktopGUI.serverCircleList.children.add(circle)
+        circleList += (player("pid") -> circle)
       }
-
+      DesktopGUI.newServerCircleList = circleList
     })
   }
 }
-
-
 
 object DesktopGUI extends JFXApp {
   var socket: Socket = IO.socket("http://localhost:8080/")
@@ -50,14 +46,49 @@ object DesktopGUI extends JFXApp {
 
   var lastUpdateTime: Long = System.nanoTime()
 
-  var serverCircleList: Group = new Group {}
+  var newServerCircleList: Map[String, Map[String, String]] = Map()
+  var currentServerCircleList: Map[String, Circle] = Map()
+
+  val stageGroup: Group = new Group {}
 
   this.stage = new PrimaryStage {
     title = "Project: Circle Clicker"
     scene = new Scene() {
-      content = List(serverCircleList)
-      addEventHandler(KeyEvent.KEY_PRESSED, (event: KeyEvent) => socket.emit("GUIkeyStates", event.getCode))
-      addEventHandler(MouseEvent.MOUSE_CLICKED, (event: MouseEvent) => socket.emit("click",Map("x" -> event.getX, "y" -> event.getY)
+      content = List(stageGroup)
+      addEventHandler(KeyEvent.KEY_PRESSED, (event: KeyEvent) => socket.emit("keyStates", event.getCode))
+      addEventHandler(MouseEvent.MOUSE_CLICKED, (event: MouseEvent) => socket.emit("click", Json.stringify(Json.toJson(Map("x" -> event.getX, "y" -> event.getY)))))
     }
   }
+
+  val update: Long => Unit = (time: Long) => {
+    val dt: Double = (time - lastUpdateTime) / 1000000000.0
+    lastUpdateTime = time
+    var childrenMap: Map[String, Circle] = Map()
+    var childrenList: List[Circle] = List()
+    for ((i, j) <- newServerCircleList){
+      if (currentServerCircleList.contains(i)){
+        currentServerCircleList(i).centerX_=(j("x").toDouble)
+        currentServerCircleList(i).centerY_=(j("y").toDouble)
+        currentServerCircleList(i).radius_=(j("score").toDouble * 5 + 10)
+        childrenMap = childrenMap + (i -> currentServerCircleList(i))
+        childrenList = currentServerCircleList(i) :: childrenList
+      } else {
+        val Circle: Circle = new Circle{
+          centerX_=(j("x").toDouble)
+          centerY_=(j("y").toDouble)
+          radius_=(j("score").toDouble * 5 + 10)
+          if (j("color") == "Red"){
+            fill = Color.Red
+          } else {
+            fill = Color.Green
+          }
+        }
+        childrenMap = childrenMap + (i -> Circle)
+        childrenList = Circle :: childrenList
+      }
+    }
+    stageGroup.children_=(childrenList)
+    currentServerCircleList = childrenMap
+  }
+  AnimationTimer(update).start()
 }
