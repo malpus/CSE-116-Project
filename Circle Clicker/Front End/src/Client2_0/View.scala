@@ -19,14 +19,14 @@ class HandleMessagesFromPython() extends Emitter.Listener {
       var circleList: Map[String, Map[String, String]] = Map()
       for (i <- gameStateList){
         val player: Map[String, String] = Json.parse(i).as[Map[String, String]]
-        val circle: Map[String, String] = Map(
+        var circle: Map[String, String] = Map(
           "x" -> player("posx"),
           "y" -> player("posy"),
           "score" -> player("score"),
           "color" -> "Red"
         )
-        if (DesktopGUI.clientID == player("pid")){
-          circle("color") = "Green"
+        if (DesktopGUI.clientID != player("pid")){
+          circle = circle + ("color" -> "Green")
         }
         circleList += (player("pid") -> circle)
       }
@@ -63,19 +63,32 @@ object DesktopGUI extends JFXApp {
   val update: Long => Unit = (time: Long) => {
     val dt: Double = (time - lastUpdateTime) / 1000000000.0
     lastUpdateTime = time
+    var childrenMap: Map[String, Circle] = Map()
+    var childrenList: List[Circle] = List()
     for ((i, j) <- newServerCircleList){
       if (currentServerCircleList.contains(i)){
         currentServerCircleList(i).centerX_=(j("x").toDouble)
         currentServerCircleList(i).centerY_=(j("y").toDouble)
         currentServerCircleList(i).radius_=(j("score").toDouble * 5 + 10)
+        childrenMap = childrenMap + (i -> currentServerCircleList(i))
+        childrenList = currentServerCircleList(i) :: childrenList
       } else {
         val Circle: Circle = new Circle{
           centerX_=(j("x").toDouble)
           centerY_=(j("y").toDouble)
-          radius_=(j(""))
+          radius_=(j("score").toDouble * 5 + 10)
+          if (j("color") == "Red"){
+            fill = Color.Red
+          } else {
+            fill = Color.Green
+          }
         }
+        childrenMap = childrenMap + (i -> Circle)
+        childrenList = Circle :: childrenList
       }
     }
+    stageGroup.children_=(childrenList)
+    currentServerCircleList = childrenMap
   }
   AnimationTimer(update).start()
 }
