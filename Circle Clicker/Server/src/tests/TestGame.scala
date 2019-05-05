@@ -20,7 +20,34 @@ class TestGame extends FunSuite{
     assert(game.players.size == 3, "check remove method")
   }
 
-  test("Test verifyClick"){}
+  test("Test click player"){
+    var game = new Game()
+    game.addPlayer("bob")
+    game.addPlayer("sam")
+    game.addPlayer("roger")
+    game.addPlayer("caroline")
+    assert(game.players("bob").score == 0, "check starting score")
+    game.players("sam").x = 400
+    game.players("sam").y = 900
+    game.players("bob").x = 500
+    game.players("bob").y = 400
+    game.clickPlayer("bob",400,900)
+    assert(game.players("sam").score == 1, "check click player method")
+    game.clickPlayer("bob", 500, 400)
+    assert(game.players("bob").score == 0, "check clicking on themselves")
+  }
 
-  test("Test Update"){}
+  test("Test Elimination"){
+    var game = new Game()
+    game.addPlayer("bob")
+    game.addPlayer("john")
+    game.addPlayer("mary")
+    game.addPlayer("kate")
+    game.players("bob").score =4
+    game.EliminatePlayers()
+    assert(game.players.size == 3, "check when same scores")
+    assert(game.players.contains("bob") == false, "check elimination logic")
+    game.EliminatePlayers()
+    assert(game.players.size == 2, "still eliminates when equal amount")
+  }
 }
