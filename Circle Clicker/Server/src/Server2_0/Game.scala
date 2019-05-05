@@ -20,10 +20,12 @@ class Game {
   }
 
   def clickPlayer(attacker: String, mouseX: Double, mouseY: Double): Unit = {
-    for ((i, j) <- players){
-      val distanceClicked: Double = Math.sqrt(Math.pow(mouseX - j.x, 2) + Math.pow(mouseY - j.y, 2))
-      if (distanceClicked < 10 + 5*j.score && i != attacker){
-        j.score += 1
+    if (players.contains(attacker)) {
+      for ((i, j) <- players) {
+        val distanceClicked: Double = Math.sqrt(Math.pow(mouseX - j.x, 2) + Math.pow(mouseY - j.y, 2))
+        if (distanceClicked < 10 + 5 * j.score && i != attacker) {
+          j.score += 1
+        }
       }
     }
   }
@@ -39,7 +41,7 @@ class Game {
   def update(): Unit = {}
 
   def EliminatePlayers(): Unit = {
-    if (players.size > 3){
+    if (players.size > 1){
       val numberToEliminate: Int = Math.ceil(players.size * .1).toInt
       for (_ <- 0 to numberToEliminate){
         var smallestPlayer: Double = Double.PositiveInfinity
