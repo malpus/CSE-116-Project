@@ -24,6 +24,18 @@ function handleEvent(event, toSet){
     }
 }
 
+
+function handleClick(event) {
+    var clickPos = {
+        "x" : event.pageX,
+        "y" : event.pageY
+    };
+    /*console.log(clickPos);
+    console.log(JSON.stringify(clickPos));*/
+    socket.emit("click", JSON.stringify(clickPos));
+}
+
+
 document.addEventListener("keydown", function (event) {
     handleEvent(event, true);
 });
@@ -31,3 +43,9 @@ document.addEventListener("keydown", function (event) {
 document.addEventListener("keyup", function (event) {
     handleEvent(event, false);
 });
+
+document.addEventListener("click", function (event) {
+    handleClick(event);
+});
+
+

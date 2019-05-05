@@ -39,6 +39,7 @@ class ScalaModelServer(gameActor: ActorRef) extends Actor {
       gameActor ! SendGameState
 
     case gs: GameState =>
+      println(gs.gameState)
       this.webServers.foreach((client: ActorRef) => client ! Write(ByteString(gs.gameState + "~")))
   }
 

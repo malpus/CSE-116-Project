@@ -74,7 +74,9 @@ def key_state(jsonKeyStates):
 def click(jsonClickPos):
     print(request.sid + " attacked")
     clickPos = json.loads(jsonClickPos)
-    message = {"username": request.sid, "action": "clicked", "x": clickPos["x"], "y": clickPos["y"]}
+    print(clickPos)
+    message = {"username": request.sid, "action": "click", "x": clickPos["x"], "y": clickPos["y"]}
+    print(message)
     send_to_scala(message)
 
 

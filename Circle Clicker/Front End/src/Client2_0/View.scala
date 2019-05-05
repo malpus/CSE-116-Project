@@ -20,8 +20,8 @@ class HandleMessagesFromPython() extends Emitter.Listener {
         val player: Map[String, String] = Json.parse(i).as[Map[String, String]]
         val circle: Circle = new Circle {
           val r = new scala.util.Random
-          centerX_=(player("x").toDouble)
-          centerY_=(player("y").toDouble)
+          centerX_=(player("posx").toDouble)
+          centerY_=(player("posy").toDouble)
           radius_=(player("score").toDouble)
           fill = Color.Red
         }
