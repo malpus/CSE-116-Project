@@ -1,8 +1,6 @@
 var socket = io.connect({transports: ['websocket']});
 socket.on('gameState', parseGameState);
 
-const tile = 30;
-
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 context.globalCompositeOperation = 'source-over';

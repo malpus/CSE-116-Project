@@ -47,5 +47,3 @@ document.addEventListener("keyup", function (event) {
 document.addEventListener("click", function (event) {
     handleClick(event);
 });
-
-

@@ -16,5 +16,4 @@ class Player(val name: String) {
     radius_=(Config.startingRadius)
     fill = Color.Green
   }
-
 }
