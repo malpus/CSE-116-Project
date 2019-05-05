@@ -22,8 +22,8 @@ class Game {
   def clickPlayer(attacker: String, mouseX: Double, mouseY: Double): Unit = {
     for ((i, j) <- players){
       val distanceClicked: Double = Math.sqrt(Math.pow(mouseX - j.x, 2) + Math.pow(mouseY - j.y, 2))
-      if (distanceClicked < j.score && i != attacker){                                                // j.score =0 initially, fix
-        players(attacker).score += 1
+      if (distanceClicked < 10 + 5*j.score && i != attacker){
+        j.score += 1
       }
     }
   }
