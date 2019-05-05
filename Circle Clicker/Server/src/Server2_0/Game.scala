@@ -44,10 +44,10 @@ class Game {
     if (players.size > 1){
       val numberToEliminate: Int = Math.ceil(players.size * .1).toInt
       for (_ <- 1 to numberToEliminate){
-        var smallestPlayer: Double = Double.PositiveInfinity
+        var smallestPlayer: Double = Double.NegativeInfinity
         var playerId: String = ""
         for ((_, i) <- players){
-          if (i.score < smallestPlayer){
+          if (i.score > smallestPlayer){
             smallestPlayer = i.score
             playerId = i.pid
           }
