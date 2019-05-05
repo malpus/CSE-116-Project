@@ -25,7 +25,7 @@ class HandleMessagesFromPython() extends Emitter.Listener {
           "score" -> player("score"),
           "color" -> "Red"
         )
-        if (DesktopGUI.clientID != player("pid")){
+        if (DesktopGUI.clientID == player("pid")){
           circle = circle + ("color" -> "Green")
         }
         circleList += (player("pid") -> circle)
@@ -56,7 +56,7 @@ object DesktopGUI extends JFXApp {
     scene = new Scene() {
       content = List(stageGroup)
       addEventHandler(KeyEvent.KEY_PRESSED, (event: KeyEvent) => socket.emit("keyStates", event.getCode))
-      addEventHandler(MouseEvent.MOUSE_CLICKED, (event: MouseEvent) => socket.emit("click", Map("x" -> event.getX, "y" -> event.getY)))
+      addEventHandler(MouseEvent.MOUSE_CLICKED, (event: MouseEvent) => socket.emit("click", Json.stringify(Json.toJson(Map("x" -> event.getX, "y" -> event.getY)))))
     }
   }
 
