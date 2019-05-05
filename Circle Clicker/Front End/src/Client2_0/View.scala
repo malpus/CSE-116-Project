@@ -55,7 +55,7 @@ object DesktopGUI extends JFXApp {
     title = "Project: Circle Clicker"
     scene = new Scene() {
       content = List(stageGroup)
-      addEventHandler(KeyEvent.KEY_PRESSED, (event: KeyEvent) => socket.emit("keyStates", event.getCode))
+      addEventHandler(KeyEvent.KEY_PRESSED, (event: KeyEvent) => socket.emit("GUIkeyStates", event.getCode))
       addEventHandler(MouseEvent.MOUSE_CLICKED, (event: MouseEvent) => socket.emit("click", Json.stringify(Json.toJson(Map("x" -> event.getX, "y" -> event.getY)))))
     }
   }

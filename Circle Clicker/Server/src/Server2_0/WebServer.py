@@ -73,16 +73,19 @@ def key_state(jsonKeyStates):
 
 @socket_server.on('GUIkeyStates')
 def key_state(GUIkeyState):
+    print(GUIkeyState)
     x = 0.0
-    y = 0.0
-    if GUIkeyState == "Left" or "A":
+    if GUIkeyState == "LEFT" or GUIkeyState == "A":
         x = -1
-    elif GUIkeyState == "Right" or "D":
+    elif GUIkeyState == "RIGHT" or GUIkeyState == "D":
         x = 1
-    if GUIkeyState == "Up" or "W":
+    y = 0.0
+    if GUIkeyState == "UP" or GUIkeyState == "W":
         y = -1
-    elif GUIkeyState == "Down" or "D":
+    elif GUIkeyState == "DOWN" or GUIkeyState == "D":
         y = 1
+    print(x)
+    print(y)
     message = {"username": request.sid, "action": "move", "x": x, "y": y}
     send_to_scala(message)
 
