@@ -1,7 +1,7 @@
 var socket = io.connect({transports: ['websocket']});
 socket.on('gameState', parseGameState);
 
-const tileSize = 30;
+const tile = 30;
 
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
@@ -46,11 +46,11 @@ function drawCircle(x,y, point){
 }
 
 function drawGameBoard() {
-    const gridWidth = 40;
-    const gridHeight = 20;
+    var gameWidth = 1000;
+    var gameHeight = 500;
 
-    context.clearRect(0, 0, gridWidth * tileSize, gridHeight * tileSize);
+    context.clearRect(0, 0, gameWidth, gameHeight);
 
-    canvas.setAttribute("width", gridWidth * tileSize);
-    canvas.setAttribute("height", gridHeight * tileSize);
+    canvas.setAttribute("width", gameWidth);
+    canvas.setAttribute("height", gameHeight);
 }

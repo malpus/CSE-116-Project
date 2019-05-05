@@ -43,7 +43,7 @@ class Game {
   def EliminatePlayers(): Unit = {
     if (players.size > 1){
       val numberToEliminate: Int = Math.ceil(players.size * .1).toInt
-      for (_ <- 0 to numberToEliminate){
+      for (_ <- 1 to numberToEliminate){
         var smallestPlayer: Double = Double.PositiveInfinity
         var playerId: String = ""
         for ((_, i) <- players){
