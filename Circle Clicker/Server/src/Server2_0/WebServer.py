@@ -43,6 +43,7 @@ Thread(target=listen_to_scala, args=(scala_socket,)).start()
 def got_message():
     print(request.sid + " connected")
     message = {"username": request.sid, "action": "connected"}
+    socket_server.emit('connect', request.sid)
     send_to_scala(message)
 
 

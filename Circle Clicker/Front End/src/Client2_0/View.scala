@@ -13,9 +13,9 @@ import scalafx.scene.paint.Color
 import scalafx.scene.shape.Circle
 
 class HandleMessagesFromPython() extends Emitter.Listener {
-  override def call(objects: Object*): Unit = {
+  override def call(args: Object*): Unit = {
     Platform.runLater(() => {
-      val gameStateList: List[String] = Json.parse(objects.apply(0).toString).as[List[String]]
+      val gameStateList: List[String] = Json.parse(args.apply(0).toString).as[List[String]]
       var circleList: Map[String, Map[String, String]] = Map()
       for (i <- gameStateList){
         val player: Map[String, String] = Json.parse(i).as[Map[String, String]]
@@ -35,14 +35,26 @@ class HandleMessagesFromPython() extends Emitter.Listener {
   }
 }
 
+class grabClientID() extends Emitter.Listener{
+  override def call(args: Object*): Unit = {
+    Platform.runLater(() => {
+      if (args.nonEmpty && DesktopGUI.clientID == "") {
+        val message: String = args.apply(1).toString
+        DesktopGUI.clientID = message
+      }
+    })
+  }
+}
+
 object DesktopGUI extends JFXApp {
   var socket: Socket = IO.socket("http://localhost:8080/")
   socket.on("gameState", new HandleMessagesFromPython)
+  socket.on("connect", new grabClientID)
 
   socket.connect()
   socket.emit("connect")
 
-  val clientID: String = socket.id()
+  var clientID: String = ""
 
   var lastUpdateTime: Long = System.nanoTime()
 
