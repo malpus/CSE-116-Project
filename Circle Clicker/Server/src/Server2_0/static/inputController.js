@@ -1,47 +1,29 @@
-var keyStates = {
-    "w": false,
-    "a": false,
-    "s": false,
-    "d": false
-};
+function handleKeys(event) {
+    var message = "";
 
-function setState(key, toSet){
-    if(keyStates[key] !== toSet){
-        keyStates[key] = toSet;
-        socket.emit("keyStates", JSON.stringify(keyStates));
-    }
-}
-
-function handleEvent(event, toSet){
     if(event.key === "w" || event.key === "ArrowUp"){
-        setState("w", toSet);
+        message = "UP";
     }else if(event.key === "a" || event.key === "ArrowLeft"){
-        setState("a", toSet);
+        message = "LEFT";
     }else if(event.key === "s" || event.key === "ArrowDown"){
-        setState("s", toSet);
+        message = "DOWN";
     }else if(event.key === "d" || event.key === "ArrowRight"){
-        setState("d", toSet);
+        message = "RIGHT";
     }
-}
 
+    socket.emit("keystates", JSON.stringify(message));
+}
 
 function handleClick(event) {
     var clickPos = {
         "x" : event.pageX,
         "y" : event.pageY
     };
-    /*console.log(clickPos);
-    console.log(JSON.stringify(clickPos));*/
     socket.emit("click", JSON.stringify(clickPos));
 }
 
-
 document.addEventListener("keydown", function (event) {
-    handleEvent(event, true);
-});
-
-document.addEventListener("keyup", function (event) {
-    handleEvent(event, false);
+    handleKeys(event, true);
 });
 
 document.addEventListener("click", function (event) {
