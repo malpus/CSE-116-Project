@@ -80,7 +80,7 @@ object ScalaModelServer {
 
     actorSystem.scheduler.schedule(16.milliseconds, 32.milliseconds, gameActor, UpdateGame)
     actorSystem.scheduler.schedule(32.milliseconds, 32.milliseconds, server, SendGameState)
-    actorSystem.scheduler.schedule(60.seconds, 60.seconds, gameActor, EliminatePlayers)
+    actorSystem.scheduler.schedule(30.seconds, 30.seconds, gameActor, EliminatePlayers)
   }
 
 }

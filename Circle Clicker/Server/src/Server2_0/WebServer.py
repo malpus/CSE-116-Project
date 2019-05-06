@@ -56,6 +56,7 @@ def disconnect():
 
 @socket_server.on('keyStates')
 def key_state(jsonKeyStates):
+    print(jsonKeyStates)
     key_states = json.loads(jsonKeyStates)
     x = 0.0
     if key_states["a"] and not key_states["d"]:
@@ -67,6 +68,25 @@ def key_state(jsonKeyStates):
         y = -1.0
     elif not key_states["w"] and key_states["s"]:
         y = 1.0
+    message = {"username": request.sid, "action": "move", "x": x, "y": y}
+    send_to_scala(message)
+
+
+@socket_server.on('GUIkeyStates')
+def key_state(GUIkeyState):
+    print(GUIkeyState)
+    x = 0.0
+    if GUIkeyState == "LEFT" or GUIkeyState == "A":
+        x = -1
+    elif GUIkeyState == "RIGHT" or GUIkeyState == "D":
+        x = 1
+    y = 0.0
+    if GUIkeyState == "UP" or GUIkeyState == "W":
+        y = -1
+    elif GUIkeyState == "DOWN" or GUIkeyState == "D":
+        y = 1
+    print(x)
+    print(y)
     message = {"username": request.sid, "action": "move", "x": x, "y": y}
     send_to_scala(message)
 

@@ -4,7 +4,7 @@ import play.api.libs.json.Json
 
 class player (var x: Double, var y: Double, var pid: String ) {
 
-  var speed: Double = 1
+  var speed: Double = 5
 
   var score: Double = 0
 
