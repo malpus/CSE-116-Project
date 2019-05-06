@@ -11,7 +11,7 @@ function handleKeys(event) {
         message = "RIGHT";
     }
 
-    socket.emit("keystates", JSON.stringify(message));
+    socket.emit("keystates", message);
 }
 
 function handleClick(event) {

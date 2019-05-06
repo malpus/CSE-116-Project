@@ -67,8 +67,6 @@ def key_state(GUIkeyState):
         y = -1
     elif GUIkeyState == "DOWN" or GUIkeyState == "D":
         y = 1
-    print(x)
-    print(y)
     message = {"username": request.sid, "action": "move", "x": x, "y": y}
     send_to_scala(message)
 
